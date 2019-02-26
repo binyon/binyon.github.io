@@ -6,7 +6,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="https://binyon.github.io/"/>
-  <updated>2019-02-23T13:46:33.932Z</updated>
+  <updated>2019-02-26T06:18:43.497Z</updated>
   <id>https://binyon.github.io/</id>
   
   <author>
@@ -15,6 +15,29 @@
   </author>
   
   <generator uri="http://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>Python 直接赋值、浅拷贝和深拷贝之间区别</title>
+    <link href="https://binyon.github.io/2019/02/26/python-copy-deepcopy/"/>
+    <id>https://binyon.github.io/2019/02/26/python-copy-deepcopy/</id>
+    <published>2019-02-26T05:59:48.000Z</published>
+    <updated>2019-02-26T06:18:43.497Z</updated>
+    
+    <content type="html"><![CDATA[<h2 id="内容参考"><a href="#内容参考" class="headerlink" title="内容参考"></a>内容参考</h2><pre><code>http://www.runoob.com/w3cnote/python-understanding-dict-copy-shallow-or-deep.html</code></pre><h2 id="解释说明"><a href="#解释说明" class="headerlink" title="解释说明"></a>解释说明</h2><ul><li>直接赋值：其实就是对象的引用（别名），改变一个另外一个也会改变</li></ul><p>对于可变或包含可变项的集合，有时需要一个副本，因此可以更改一个副本而不更改另一个副本，这就是浅拷贝和深层拷贝出现的原因</p><ul><li><p>浅拷贝(copy)：拷贝父对象，不会拷贝对象的内部的（可变）子对象，父对象是独立的，但是子对象的指向是相同的，采用对象的引用</p></li><li><p>深拷贝(deepcopy)： 需要导入copy 模块的 deepcopy 方法，完全拷贝了父对象及其子对象，两者是独立的</p></li></ul><h2 id="代码实例"><a href="#代码实例" class="headerlink" title="代码实例"></a>代码实例</h2><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 赋值引用</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># a对象是一个字典，字典的值是一个列表，是一个`可变对象`</span></span><br><span class="line">a = &#123;<span class="number">1</span>:[<span class="number">1</span>,<span class="number">234</span>,<span class="number">3</span>]&#125;</span><br><span class="line"></span><br><span class="line">b = a</span><br><span class="line"></span><br><span class="line"><span class="comment"># 给b的值中增加一个元素</span></span><br><span class="line">b[<span class="number">1</span>].append(<span class="number">2</span>)</span><br><span class="line"><span class="comment"># 输出a，b的值</span></span><br><span class="line">print(a,b) <span class="comment"># &#123;1: [1, 234, 3, 2]&#125; &#123;1: [1, 234, 3, 2]&#125;</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="comment"># 浅拷贝,深拷贝</span></span><br><span class="line"><span class="keyword">import</span> copy</span><br><span class="line">a = [<span class="number">1</span>,<span class="number">12</span>,<span class="number">3</span>,<span class="number">2</span>,[<span class="string">'a'</span>,<span class="string">'b'</span>]]</span><br><span class="line"></span><br><span class="line">b = a.copy() <span class="comment">#或者导入copy模块,使用copy.copy(a)</span></span><br><span class="line">c = copy.deepcopy(a)</span><br><span class="line"></span><br><span class="line">a.append(<span class="number">5</span>)</span><br><span class="line">a[<span class="number">4</span>].append(<span class="number">2</span>)</span><br><span class="line"></span><br><span class="line">print(<span class="string">'a = '</span>, a) <span class="comment">#a =  [1, 12, 3, 2, ['a', 'b', 2], 5]</span></span><br><span class="line">print(<span class="string">'b = '</span>, b) <span class="comment">#b =  [1, 12, 3, 2, ['a', 'b', 2]]</span></span><br><span class="line">print(<span class="string">'c = '</span>, c) <span class="comment">#c =  [1, 12, 3, 2, ['a', 'b']]</span></span><br></pre></td></tr></table></figure>]]></content>
+    
+    <summary type="html">
+    
+      
+      
+        &lt;h2 id=&quot;内容参考&quot;&gt;&lt;a href=&quot;#内容参考&quot; class=&quot;headerlink&quot; title=&quot;内容参考&quot;&gt;&lt;/a&gt;内容参考&lt;/h2&gt;&lt;pre&gt;&lt;code&gt;http://www.runoob.com/w3cnote/python-understanding-dic
+      
+    
+    </summary>
+    
+      <category term="Python" scheme="https://binyon.github.io/categories/Python/"/>
+    
+    
+  </entry>
   
   <entry>
     <title>搜索技巧</title>
@@ -483,9 +506,9 @@
     
       <category term="Hexo" scheme="https://binyon.github.io/categories/Hexo/"/>
     
-      <category term="Markdown" scheme="https://binyon.github.io/categories/Markdown/"/>
-    
       <category term="GitHub" scheme="https://binyon.github.io/categories/GitHub/"/>
+    
+      <category term="Markdown" scheme="https://binyon.github.io/categories/Markdown/"/>
     
     
   </entry>

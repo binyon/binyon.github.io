@@ -1,6 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
+    <title><![CDATA[Python 直接赋值、浅拷贝和深拷贝之间区别]]></title>
+    <url>%2F2019%2F02%2F26%2Fpython-copy-deepcopy%2F</url>
+    <content type="text"><![CDATA[内容参考http://www.runoob.com/w3cnote/python-understanding-dict-copy-shallow-or-deep.html 解释说明 直接赋值：其实就是对象的引用（别名），改变一个另外一个也会改变 对于可变或包含可变项的集合，有时需要一个副本，因此可以更改一个副本而不更改另一个副本，这就是浅拷贝和深层拷贝出现的原因 浅拷贝(copy)：拷贝父对象，不会拷贝对象的内部的（可变）子对象，父对象是独立的，但是子对象的指向是相同的，采用对象的引用 深拷贝(deepcopy)： 需要导入copy 模块的 deepcopy 方法，完全拷贝了父对象及其子对象，两者是独立的 代码实例123456789101112131415161718192021222324252627# 赋值引用# a对象是一个字典，字典的值是一个列表，是一个`可变对象`a = &#123;1:[1,234,3]&#125;b = a# 给b的值中增加一个元素b[1].append(2)# 输出a，b的值print(a,b) # &#123;1: [1, 234, 3, 2]&#125; &#123;1: [1, 234, 3, 2]&#125;# 浅拷贝,深拷贝import copya = [1,12,3,2,['a','b']]b = a.copy() #或者导入copy模块,使用copy.copy(a)c = copy.deepcopy(a)a.append(5)a[4].append(2)print('a = ', a) #a = [1, 12, 3, 2, ['a', 'b', 2], 5]print('b = ', b) #b = [1, 12, 3, 2, ['a', 'b', 2]]print('c = ', c) #c = [1, 12, 3, 2, ['a', 'b']]]]></content>
+      <categories>
+        <category>Python</category>
+      </categories>
+  </entry>
+  <entry>
     <title><![CDATA[搜索技巧]]></title>
     <url>%2F2019%2F02%2F23%2F%E6%90%9C%E7%B4%A2%E6%8A%80%E5%B7%A7%2F</url>
     <content type="text"><![CDATA[短语搜索 搜索引擎对于用户检索的关键词并不会进行完全匹配搜索，对于多个关键词的检索一般会进行单个关键词的检索而给出结果页面，造成我们搜索到额结果不符合预期，从而费力去手动去筛选信息，这并不符合我们的工作高效率的原则。Google给我们提供了一种方法，叫做短语搜索的。通过给你的几个关键词加上引号，搜索得到的结果将会和你的关键词完全匹配，包括关键词的顺序都一致。 模糊搜索，~Link，查询与这个网站祥光的的网站信息Site，查询该域名小的所有网站信息，site:youku.com尽量少使用all开头的特殊匹配字符查询。 &quot;&quot; 双引号将要搜索的内容放入双引号中，代表完全匹配要搜索的内容，并且顺序一致。 - 减号排除减号后面的内容，减号前面有空格，后面没有空格，如“搜索 -引擎”。相应的还有加号“+”可以在但是不强制要求，可以使用空格代替，一般用于多个关键词检索，减小搜索范围，排除其他出现的干扰词 通配符*表示任一的意思，遇到有什么东西记得不清楚了可以采用这种方法模糊搜索，如“不见黄河之水”“蜀*难” inurl如“inurl:搜索引擎优化”，表示在搜索的网址中的包含后面的关键词“搜索引擎优化”，而不是网页内容中包含后面的内容，一般出现的是如百度百科，维基百科之类的网页词条介绍 inanchor锚链接内容搜索，计算机专用的术语，表示一个锚中出现有后面的内容的词语，可以理解为链接的别名，但是最后的搜索结果不一定包括有后面你要求的内容。如“inanchor：登陆” intitle搜索网页html title标签包含的内容，主要用于专业人士使用。如“intitle:豆瓣” allintitleintitle的进阶版本，用于title标签中的多个关键词搜索，如“allintitle:豆瓣 知乎 区别” allinurlinurl的进阶版，“allinurl:豆瓣 知乎”就相当于“inurl:豆瓣 inurl:知乎” filetype指定特定文件搜索类型，如“filetype:pdf c语言”，“filetype:docx 食品健康”主要用于资源的搜索，像视频种子资源的搜索之类的 site指定搜索的站点，在特定的网站内搜索，如“site:youku.com 一路向西” relatedrelated:youku.com 返回的是与优酷有关的网站，排除了优酷网站本身，具体相关性无法考证，只适用于Google ~模糊匹配搜索，在前面或者是后面。 以上的命令都可以互相组合后再用]]></content>
@@ -184,8 +192,8 @@
     <content type="text"><![CDATA[Welcome to Hexo! This is your very first post. Check documentation for more info. If you get any problems when using Hexo, you can find the answer in troubleshooting or you can ask me on GitHub. Quick InstallPlatform : Ubuntu 16.04 intall nodejs v8.9.1 ro higher12345678# install nodejs. $ sudo apt install npm # or you can visit the nodejs website download it.# clean the npm cache$ sudo npm cache clean -f# install a helper called `n`$ sudo npm intall -g n# use the `n` to install nodejs v8.9.1, which we nedd it to use the `themes/next`$ sudo n 8.9.1 Install Git1$ sudo apt install git # install the git. Install hexo12# install the `hexo` package, $ sudo npm install -g hexo-cli Init hexo12345678# create a directory ,which called `hexo`$ mkdir hexo# switch to the folder `hexo`$ cd hexo# init the folder to become the blog$ hexo init# install `node` dependency package$ npm install # or sudo npm install Quick StartCreate a new post1$ hexo new "My New Post" # then you will see a my-new-post.md in the source/_posts More info: Writing Run server1$ hexo server # or use `hexo s`,click the `http://localhost:4000` to you default browser to see the blog. More info: Server Generate static files1$ hexo generate # or use `hexo g` More info: Generating Deploy to Github Pages1$ hexo deploy # or use `hexo d` More info: Deployment Writing CategoriesIf you write the following code in you posts.md file then you will get the following scene. 1234567- Sports- Baseball- [Sports, Baseball]- [MLB, American League, Boston Red Sox]- [MLB, American League, New York Yankees]- [Movies]- [Code] Exapmle]]></content>
       <categories>
         <category>Hexo</category>
-        <category>Markdown</category>
         <category>GitHub</category>
+        <category>Markdown</category>
       </categories>
   </entry>
   <entry>
