@@ -1,0 +1,1620 @@
+<!DOCTYPE html>
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+<html class="theme-next gemini use-motion" lang>
+<head><meta name="generator" content="Hexo 3.8.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform">
+<meta http-equiv="Cache-Control" content="no-siteapp">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css">
+
+<link href="/css/main.css?v=6.5.0" rel="stylesheet" type="text/css">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=6.5.0">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=6.5.0">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=6.5.0">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=6.5.0" color="#222">
+
+
+
+
+
+
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Gemini',
+    version: '6.5.0',
+    sidebar: {"position":"right","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":true},
+    fancybox: false,
+    fastclick: false,
+    lazyload: false,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+  
+
+
+
+
+  <meta name="description" content="一、     游戏系统架构一）系统架构图 《王者荣耀》游戏分析（删减版）注：红色字体为重要系统 二）系统结构说明1、王者荣耀游戏类型：MOBA，即时对战类 2、游戏组成： PVP、PVE、养成及收集系统、辅助系统、任务系统、社交系统、计费系统，共7大系统组成。 其中主要系统为： 1）PVP：排位模式(单人、双人、三人、五人)，匹配模式(1-5人匹配、1v1、3v3)，大乱斗(1-5人)、娱乐模式(">
+<meta name="keywords" content="Python Java MarkDown">
+<meta property="og:type" content="article">
+<meta property="og:title" content="wangzherongyao">
+<meta property="og:url" content="https://binyon.github.io/2019/02/28/wangzherongyao/index.html">
+<meta property="og:site_name" content="WELCOME">
+<meta property="og:description" content="一、     游戏系统架构一）系统架构图 《王者荣耀》游戏分析（删减版）注：红色字体为重要系统 二）系统结构说明1、王者荣耀游戏类型：MOBA，即时对战类 2、游戏组成： PVP、PVE、养成及收集系统、辅助系统、任务系统、社交系统、计费系统，共7大系统组成。 其中主要系统为： 1）PVP：排位模式(单人、双人、三人、五人)，匹配模式(1-5人匹配、1v1、3v3)，大乱斗(1-5人)、娱乐模式(">
+<meta property="og:locale" content="default">
+<meta property="og:updated_time" content="2019-02-28T14:28:44.297Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="wangzherongyao">
+<meta name="twitter:description" content="一、     游戏系统架构一）系统架构图 《王者荣耀》游戏分析（删减版）注：红色字体为重要系统 二）系统结构说明1、王者荣耀游戏类型：MOBA，即时对战类 2、游戏组成： PVP、PVE、养成及收集系统、辅助系统、任务系统、社交系统、计费系统，共7大系统组成。 其中主要系统为： 1）PVP：排位模式(单人、双人、三人、五人)，匹配模式(1-5人匹配、1v1、3v3)，大乱斗(1-5人)、娱乐模式(">
+
+
+
+
+
+
+  <link rel="canonical" href="https://binyon.github.io/2019/02/28/wangzherongyao/">
+
+
+
+<script type="text/javascript" id="page.configurations">
+  CONFIG.page = {
+    sidebar: "",
+  };
+</script>
+
+  <title>wangzherongyao | WELCOME</title>
+  
+
+
+
+
+
+
+
+
+
+
+
+  <noscript>
+  <style type="text/css">
+    .use-motion .motion-element,
+    .use-motion .brand,
+    .use-motion .menu-item,
+    .sidebar-inner,
+    .use-motion .post-block,
+    .use-motion .pagination,
+    .use-motion .comments,
+    .use-motion .post-header,
+    .use-motion .post-body,
+    .use-motion .collection-title { opacity: initial; }
+
+    .use-motion .logo,
+    .use-motion .site-title,
+    .use-motion .site-subtitle {
+      opacity: initial;
+      top: initial;
+    }
+
+    .use-motion {
+      .logo-line-before i { left: initial; }
+      .logo-line-after i { right: initial; }
+    }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="default">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-right page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">WELCOME</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+    
+      
+        <p class="site-subtitle">Learn as a programmer.</p>
+      
+    
+  </div>
+
+  <div class="site-nav-toggle">
+    <button aria-label="Toggle navigation bar">
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  
+    <ul id="menu" class="menu">
+      
+        
+        
+        
+          
+          <li class="menu-item menu-item-home">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/" rel="section"><i class="menu-item-icon fa fa-fw fa-home"></i> <br>Home</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-about">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/about/" rel="section"><i class="menu-item-icon fa fa-fw fa-user"></i> <br>About</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-tags">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/tags/" rel="section"><i class="menu-item-icon fa fa-fw fa-tags"></i> <br>Tags</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-categories">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/categories/" rel="section"><i class="menu-item-icon fa fa-fw fa-th"></i> <br>Categories</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-archives">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/archives/" rel="section"><i class="menu-item-icon fa fa-fw fa-archive"></i> <br>Archives</a>
+
+  </li>
+
+      
+      
+        <li class="menu-item menu-item-search">
+          
+            <a href="javascript:;" class="popup-trigger">
+          
+            
+              <i class="menu-item-icon fa fa-search fa-fw"></i> <br>Search</a>
+        </li>
+      
+    </ul>
+  
+
+  
+
+  
+    <div class="site-search">
+      
+  <div class="popup search-popup local-search-popup">
+  <div class="local-search-header clearfix">
+    <span class="search-icon">
+      <i class="fa fa-search"></i>
+    </span>
+    <span class="popup-btn-close">
+      <i class="fa fa-times-circle"></i>
+    </span>
+    <div class="local-search-input-wrapper">
+      <input autocomplete="off" placeholder="Searching..." spellcheck="false" type="text" id="local-search-input">
+    </div>
+  </div>
+  <div id="local-search-result"></div>
+</div>
+
+
+
+    </div>
+  
+</nav>
+
+
+
+  
+
+
+
+</div>
+    </header>
+
+    
+
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+            
+
+          
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://binyon.github.io/2019/02/28/wangzherongyao/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="BING WU">
+      <meta itemprop="description" content="Code Eveything...">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="WELCOME">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">wangzherongyao
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+
+            
+            
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+
+              
+                
+              
+
+              <time title="Created: 2019-02-28 22:28:03 / Modified: 22:28:44" itemprop="dateCreated datePublished" datetime="2019-02-28T22:28:03+08:00">2019-02-28</time>
+            
+
+            
+              
+
+              
+            
+          </span>
+
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2019/02/28/wangzherongyao/#comments" itemprop="discussionUrl">
+                  <span class="post-meta-item-text">Comments: </span> <span class="post-comments-count gitment-comments-count" data-xid="/2019/02/28/wangzherongyao/" itemprop="commentsCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+            <span class="post-meta-divider">|</span>
+            <span class="post-meta-item-icon">
+            <i class="fa fa-eye"></i>
+             Views:  
+            <span class="busuanzi-value" id="busuanzi_value_page_pv"></span>
+            </span>
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>一、     游戏系统架构<br>一）系统架构图</p>
+<p>《王者荣耀》游戏分析（删减版）<br>注：红色字体为重要系统</p>
+<p>二）系统结构说明<br>1、王者荣耀游戏类型：MOBA，即时对战类</p>
+<p>2、游戏组成：</p>
+<pre><code>PVP、PVE、养成及收集系统、辅助系统、任务系统、社交系统、计费系统，共7大系统组成。
+</code></pre><p>其中主要系统为：</p>
+<p>1）PVP：排位模式(单人、双人、三人、五人)，匹配模式(1-5人匹配、1v1、3v3)，大乱斗(1-5人)、娱乐模式(1-5人)。</p>
+<p>2）   养成及收集：皮肤收集、铭文养成收集、英雄收集。</p>
+<p>其他系统：</p>
+<p>3）PVE系统：挑战模式、六国远征、人机模式。(共3种)</p>
+<p>4）计费系统：充值、商城、货币。(共3种)</p>
+<p>5）社交系统：好友系统、师徒系统、聊天系统、战队系统。(共4种)</p>
+<p>6）辅助系统：排行榜、成就、签到。(共3种)</p>
+<p>7）任务系统：每日、节日、特殊。(共3种)</p>
+<p>3、   该游戏中特色玩法：</p>
+<p>PVP系统中火焰山大战：</p>
+<p>1）   地图方面：从传统MOBA类游戏地图改进为魔兽3C类型地图。</p>
+<p>2）   获胜条件：从MOBA类以推倒敌方基地为胜利条件改为一方队伍杀人数到30为胜利条件。</p>
+<p>3） 玩法方面：无补刀、野怪数量减少至2个、召唤师技能数量+1、除正常移动路径外其他路径均为岩浆(玩家进入岩浆后受到伤害并减速)。</p>
+<p>4、从系统架构图中可以看出：</p>
+<p>1)       游戏中有丰富的PVP玩法，其中包括1V1的SOLO玩法、3人多种PVP玩法、1-5人的PVP及娱乐模式玩法，各类玩法总和可到达12次之多。提供给玩家多样化的游戏乐趣及体验。</p>
+<p>2)      在PVP模式中，需要多人进行的游戏模式较多，强调多人游戏模式的乐趣，鼓励玩家多进行竞争、协作与交流等交互行为。</p>
+<p>3)      游戏中具有内容含量丰富的养成及收集系统，保证玩家可以建立长期的游戏目标并且可以带给玩家成长感，延长游戏生命周期。</p>
+<p>4)      游戏中其他系统的作用为：</p>
+<p>(1)增加了游戏玩法的多样性</p>
+<p>除主要系统外仍有5种系统支撑该游戏的玩法，其他每个不同系统都会给玩家带来不同的游戏乐趣及游戏体验。</p>
+<p>(2)在玩家进行游戏体验的同时，降低玩家疲劳感和枯燥感。</p>
+<p>除主要玩法排位及匹配赛以外，该游戏还拥有PVE、娱乐模式（火焰山大战、克隆大战等无排名无积分）的玩法。通过这些娱乐的玩法，使得玩家在排位及匹配重复玩法结束后，可以通过娱乐玩法来降低玩家的疲劳感和枯燥感。</p>
+<p>二、游戏闭环图<br>一）闭环图<br>1、游戏整体闭环图</p>
+<p>《王者荣耀》游戏分析（删减版）<br>2、游戏战斗核心闭环图</p>
+<p>《王者荣耀》游戏分析（删减版）</p>
+<p>二）闭环图说明<br>1、游戏整体闭环图说明<br>1）循环模式说明</p>
+<p>玩家先接触游戏核心玩法，通过PVP、PVE及任务获得资源和货币，玩家通过消耗资源和货币对各种养成进行提升(铭文可提高玩家对局内基础属性，经验用来提升角色的等级)。玩家提升实力后，可以攻略更高难度的关卡，击败更厉害的玩家，以此对实力的提升进行验证。同时玩家会获得更多的资源，为进一步的成长打下基础，以此循环。</p>
+<p>2）限制循环的方式</p>
+<pre><code>     1、限制奖励次数：限制玩家通过PVP、PVE玩法每周可获得的经验、游戏货币的数量上限。
+
+2、限制每日任务奖励次数：玩家通过每日任务可获得经验和一定量的货币奖励，但每日限完成一次。
+</code></pre><p>3） 加速循环的方式</p>
+<p> (1)充值</p>
+<p>针对玩家群体：RMB玩家</p>
+<p>玩家通过充值获得游戏货币可以在商城中购买玩家任何想要的核心资源等物品(例：双倍经验卡、双倍金币卡)，玩家只要花费比非拥有双倍经验卡玩家一半左右的时间就可获得同样的经验和金币。快速提升玩家成长。</p>
+<p>(2)投入更多时间、精力</p>
+<p>针对玩家群体：RMB玩家、时间充裕玩家</p>
+<p>而对于充值少或不充值的玩家，可以通过花费更多的时间，参与更多的游戏内容，从而获得系统发放的免费资源，加快角色成长。</p>
+<p>(3)提升游戏技巧，增加玩家获胜概率</p>
+<p>针对玩家类型：全体玩家</p>
+<p>因玩家游戏胜利获得的奖励要高于游戏失败所获得的奖励，玩家通过自身的游戏技巧锻炼，获得游戏胜利，来获得更多的资源，加快角色成长。</p>
+<p>4） 游戏的平衡性</p>
+<pre><code>(1)游戏自身的平衡性
+
+前期：资源获取大于资源消耗，玩家成长迅速
+</code></pre><p>玩家的资源获取来源于活动与丰富的任务奖励，保证了玩家的游戏体验；初始资源消耗不大，但消耗资源的玩法较多，目的是培养玩家的资源消耗习惯。</p>
+<p>中期：资源获取小于资源消耗，玩家使用前期保存资源</p>
+<p>到了中期，玩家资源消耗逐渐增大，而资源获取增长跟不上，开始使用前期的库存资源，玩家成长速度减慢。</p>
+<p>后期：资源消耗远大于资源获取</p>
+<p>到了后期资源消耗巨大，玩家通过系统赠送的免费资源及奖励远满足不了消耗，玩家需投入更多的时间精力或充值来加快玩家成长。</p>
+<p>(2)玩家之间的平衡性</p>
+<pre><code>付费玩家与非付费玩家之间的平衡性：
+</code></pre><p>付费玩家</p>
+<p>非付费玩家</p>
+<p>PVP</p>
+<p>英雄数量</p>
+<p>更多的英雄选择</p>
+<p>更多的铭文选择（根据英雄有多套）</p>
+<p>皮肤（数量多）</p>
+<p>适量的英雄选择</p>
+<p>铭文选择（根据英雄位置各1套）</p>
+<p>皮肤（较少）</p>
+<p>铭文</p>
+<p>皮肤</p>
+<p>竞技场</p>
+<p>名次</p>
+<p>竞技场名次(提升快)</p>
+<p>竞技场排名(提升慢)</p>
+<p>PVE</p>
+<p>通关难度</p>
+<p>通关容易，速度快</p>
+<p>通关难度大，速度较慢</p>
+<p>玩家游戏体验</p>
+<p>游戏体验</p>
+<p>体验较好</p>
+<p>获取资源速度要高于非付费玩家</p>
+<p>付费玩家战胜非付费玩家几率大</p>
+<p>体验一般</p>
+<p>通过花费更多时间来获取资源</p>
+<p>与付费玩家有一定差距</p>
+<p>资源获取</p>
+<p>获胜概率</p>
+<p>2、游戏内闭环图说明<br>         1）循环模式说明</p>
+<p>玩家进入游戏后，消耗初始资源购买少量装备，通过游戏内的补兵，击杀敌方英雄，推塔，打野和随着游戏时间增加获取金币(装备卖出可获得该装备半价的金币)和经验。消耗金币更新装备，消耗经验帮助玩家等级成长。英雄实力提升后，可以更快的进行补兵、打野，并且可以增加击杀敌方英雄的概率，为进一步的提升实力打下基础，以此循环。</p>
+<p>2）限制循环的方式</p>
+<p>防御塔具有固定的数量、小兵/野怪的刷新时间固定</p>
+<p>小兵每30秒钟刷新一次，野怪70秒/90秒刷新一次，防御塔有9个(摧毁后不刷新)，通过间隔时间来刷新小兵及野怪，使玩家获得资源进行了限制，从而限制循环。</p>
+<p>3） 加速循环的方式</p>
+<pre><code>玩家的游戏操作技术及游戏节奏的整体掌控、玩家间的配合
+</code></pre><p>因小兵的刷新和野怪的刷新是固定的，所以通过玩家的个人操作技术及队友配合掠夺敌方的野区资源，和对敌方英雄进行击杀及推塔可加快循环。</p>
+<p>三）经济系统浅析<br>货币种类及基本说明<br>1）货币种类汇总表：</p>
+<p>货币种类汇总表</p>
+<p>货币转换比例：</p>
+<p>1RMB=10点券 1点券=1钻石(只限抽奖时)</p>
+<p>点券/钻石无法转换成金币</p>
+<p>货币种类</p>
+<p>获得途径</p>
+<p>消耗途径</p>
+<p>特点</p>
+<p>点券</p>
+<p>充值（唯一）</p>
+<p>皮肤/英雄购买</p>
+<p>提升贵族等级</p>
+<p>点券抽奖</p>
+<p>创建战队</p>
+<p>喇叭购买</p>
+<p>高级货币</p>
+<p>可兑换全部资源</p>
+<p>钻石</p>
+<p>武道大会</p>
+<p>签到</p>
+<p>成就系统</p>
+<p>运营活动（月卡周卡）</p>
+<p>每日任务</p>
+<p>部分英雄购买</p>
+<p>扩充铭文页</p>
+<p>中高级铭文抽奖</p>
+<p>钻石抽奖</p>
+<p>中级货币</p>
+<p>可兑换部分英雄，中级铭文（约等于提升战力）</p>
+<p>小R可通过月卡/周卡大量获得</p>
+<p>非R靠签到/成就/资源兑换少量获得</p>
+<p>金币</p>
+<p>成就达成</p>
+<p>武道大会</p>
+<p>日常活动</p>
+<p>PVP</p>
+<p>英雄购买</p>
+<p>低级铭文抽奖</p>
+<p>普通货币</p>
+<p>可购买除限定外所有英雄</p>
+<p>荣耀积分</p>
+<p>点券兑换</p>
+<p>兑换比例1：1</p>
+<p>积分夺宝</p>
+<p>特殊货币</p>
+<p>可通过抽奖来换取限定英雄/皮肤</p>
+<p>远征币</p>
+<p>PVE：六国远征</p>
+<p>购买固定英雄1名</p>
+<p>2~4级铭文</p>
+<p>特殊货币</p>
+<p>获取途径唯一</p>
+<p>可购买物品少</p>
+<p>武道币</p>
+<p>PVE：武道大会</p>
+<p>购买固定英雄1名</p>
+<p>2~4级铭文</p>
+<p>特殊货币</p>
+<p>获取途径唯一</p>
+<p>可购买物品少</p>
+<p>注： 1、红色字体为主要产出/消耗途径及特点</p>
+<pre><code>2、货币种类栏中，紫色字体货币为特殊货币
+</code></pre><p>2）多货币设计目的：</p>
+<p>1、   稳定游戏经济体系</p>
+<p>(1)只可由高级货币向低级货币兑换，对于点券作为核心货币进行了保护。</p>
+<p>(2)三种主要货币的获取途径各不相同(获取方式参照上表)。</p>
+<p>2、保证玩家丰富的游戏体验</p>
+<p>根据每种货币的获取途径不同，玩家需要了解对每种货币的获取方式，并且玩家根据不同的货币获取方式不同，需要进行充值/完成任务/多进行对战的体验才可保证收益最大化。</p>
+<p>3、适度控制玩家成长</p>
+<p>通过多种货币的设置，玩家根据自身情况收集不同种类的货币，每种货币的获取方式及消耗时间不同，目的为分散玩家的关注点。</p>
+<p>4、增加厂商收入</p>
+<p>因货币只可由高级货币向低级货币兑换，高级货币可以购买任何其他货币可购买的物品，如玩家想加快自身的成长，获得更好的游戏体验，则需进行充值，从而增加厂商收入。</p>
+<p>3）货币分析</p>
+<p>高级货币：点券<br>货币说明：</p>
+<p>最高等级的货币，充值可直接获得，可以购买游戏内的任何资源，无法通过玩法进行产出，无免费获得途径。</p>
+<p>设计目的：</p>
+<p>1、帮助玩家快速成长</p>
+<p>通过消耗点券获取资源，从而达到玩家快速成长的目的。</p>
+<p>2、对消费形成认知，培养玩家消费</p>
+<p>玩家通过游戏可发现：有许多通过充值会赠送玩家更多的货币/资源的活动，当玩家与货币资源的兑换比例和充值送赠礼等运营活动进行对比，会使玩家获得一种有便宜占的心理，从而起到了培养玩家消费的作用。</p>
+<p>3、保护付费玩家的游戏体验</p>
+<p>因点券只可通过充值获得，保证了该货币的唯一性及稳定性。从而保护了付费玩家的游戏体验。</p>
+<p>中级货币：钻石<br>货币说明：<br>钻石可通过点券进行1比1兑换获取，主要获得途径为月卡/周卡，次要获得途径为签到和每日任务。主要消耗在铭文抽奖，符文页购买。不具备流通性。</p>
+<p>设计目的：</p>
+<p>1、提高玩家活跃及在线</p>
+<p>玩家通过每日任务、签到活动使玩家可每日稳定获得部分钻石，目的是提高玩家的上线率和活跃度。</p>
+<p>2、培养玩家付费习惯</p>
+<p>在游戏中后期时，铭文及铭文页购买需要大量钻石，玩家若想获得大量钻石，则需要进行月卡/周卡购买，月卡周卡需要进行点券才可进行购买，目的为培养玩家的付费习惯。</p>
+<p>低级货币：金币<br>货币说明：</p>
+<p>游戏的基础货币，主要可通过对战和日常活动慢慢积累。产出途径稳定，主要消耗途径是英雄购买和低级铭文抽奖。在提升付费玩家感受的同时也照顾了免费玩家的基本感受。但是玩家在每周所获得的该货币数量是有一定的上限。不具备流通性。</p>
+<p>设计目的：</p>
+<p>1、提高玩家的活跃度</p>
+<p>金币因无法进行货币间的兑换，玩家只可通过对战和日常任务等进行金币获取，目的为提高玩家的在线率及活跃度。</p>
+<p>2、保证非R玩家的游戏体验</p>
+<p>金币是非R玩家最重要的资源，金币可以购买游戏中最重要的2个资源，英雄及铭文。</p>
+<p>只是获取速度相比于RMB玩家较慢一些，但也保证了非R玩家的游戏体验。</p>
+<p>3、限制玩家成长</p>
+<p>金币每周获取数量具有上限，从而限制玩家从游戏中获取过多的货币资源。</p>
+<p>特殊货币<br>一）荣耀积分</p>
+<p>说明：</p>
+<p>荣耀积分能够获取一部分的核心资源，保证玩家的高端养成。荣耀积分可适用于积分夺宝(抽奖)，玩家只能通过该抽奖方式抽取限量英雄，限量皮肤，皮肤碎片及英雄碎片。</p>
+<p>设计目的：</p>
+<p>1、区别玩家间的消费力水平</p>
+<p>直接区分了大R和其他中低额度充值的玩家的消费水平：如果玩家抱着抽到限量英雄或限量皮肤的心态去抽奖，则需花费600~2100R。(运气过好的玩家除外)</p>
+<p>2、增加玩法的多样性</p>
+<p>鼓励玩家参与该系统，体验更丰富游戏的内容。</p>
+<p>3、鼓励玩家消费</p>
+<p>厂商对部分资源以“限定”的方式推出，刺激了热爱收集的玩家及RMB玩家的收集欲望，鼓励玩家进行消费。</p>
+<p>Ø  关于通过荣耀积分抽奖可获得皮肤碎片/英雄碎片</p>
+<p>说明：</p>
+<p>通过荣耀积分抽奖有一定几率得到的碎片(偶尔系统会赠送少量)可以兑换部分英雄(包含一个限量英雄)及皮肤，增加了收集系统的多样性。</p>
+<p>设计目的：</p>
+<p>1、给与为抽中奖的玩家心理安慰</p>
+<p>当玩家花费大量金钱使用荣耀积分抽取不到限量英雄时给予玩家一个心理缓冲带，因玩家可以通过抽奖获得的英雄碎片换取领一个限量英雄，会给玩家一定程度的心理安慰。</p>
+<p>2、提升小R及非R玩家的付费率</p>
+<p>小R玩家为获得另一个限量英雄，且厂商为提升大量小R玩家充值额度的一个手段。</p>
+<p>3、下图为玩家荣耀积分抽奖简单心理流程图</p>
+<p>《王者荣耀》游戏分析（删减版）</p>
+<p>玩家抽奖心理变化转换到游戏行为变化：</p>
+<p>1、   通过设定皮肤/英雄碎片，会整体提高RMB玩家的付费额度</p>
+<p>(1)当小R玩家抽中限定后，会大幅度提高小R玩家的满足感和虚荣心，同时增加了小R玩家对该游戏的粘性。</p>
+<p>(2)当小R玩家未抽中限定时，会刺激小R玩家的收集欲，从而继续充值。如玩家通过该次小额充值获得限定时，同样会大幅度提高玩家的满足感和虚荣心。如果玩家未抽中限定时，玩家会以得到碎片为目的，换取另一限量，增加了玩家的部分满足感。</p>
+<p>2、游戏同时也为区分大R、中R、小R从而设定该系统。玩家可以通过是否有限定英雄/皮肤来作为不同级别的RMB玩家的一个参考。</p>
+<p>(1)大R为满足自身收集欲望及向其他玩家的炫耀感受从而进行大量充值和抽奖。</p>
+<p>(2)中R玩家为证明自己同样过人的经济实力，并为距离大R更近一步(抽中限定)和拉开和小R玩家的差距从而进行充值和抽奖(获取另一限量及比小R玩家更高的概率抽中限定)。</p>
+<p>(3)小R玩家大多会抱着试试手气的心理去进行抽奖，如果抽中限定会获得极大的满足，为抽中限定的话同时也可通过获得另一限定而获得满足感，从而让小R玩家通过充值拉开与非R玩家的距离和距离中R玩家更近一步的感受。</p>
+<p>二）远征币</p>
+<p>说明：</p>
+<p>通过六国远征玩法产出的货币，每天最多可获得720远征币，该货币只可在远征商店进行消费，不具备流通性。</p>
+<p>远征商店：</p>
+<p>在该商店中可兑换如上图所示：1名英雄及部分3、4级铭文。</p>
+<p>远征商店物品刷新：</p>
+<p>刷新次数</p>
+<p>刷新1~2次</p>
+<p>刷新3~4次</p>
+<p>刷新5~6次</p>
+<p>刷新7~8次</p>
+<p>刷新9~10次</p>
+<p>远征币消耗</p>
+<p>10</p>
+<p>50</p>
+<p>100</p>
+<p>200</p>
+<p>400</p>
+<p>远征币设计目的：</p>
+<p>1、   建立游戏目标</p>
+<p>通过每天该玩法玩家可获得一定量的货币，该货币可在远征商店进行部分资源购买，但需要玩家进行一定的时间积累，让玩家建立游戏目标。</p>
+<p>2、   控制玩家成长节奏</p>
+<p>因每天通过该玩法可获得的货币数量有限，从而防止控制玩家过速成长，控制玩家成长节奏。</p>
+<p>3、   提高玩家成长速度</p>
+<p>该玩法产出的货币对所有玩家都是相同的，有助于玩家的成长。</p>
+<p>优点：</p>
+<p>1、   提高玩家对于该玩法的参与度</p>
+<p>玩家为获得更多的远征币从而参与到该玩法中，提高了玩家整体游戏体验，多参与不同类的玩法，不会让玩家觉得该游戏单调乏味。</p>
+<p>2、   提高玩家的收集体验</p>
+<p>玩家不在通过单一的玩法方式进行收集，而是通过各样的玩法产生不同种类的货币，从而提高玩家的收集体验。</p>
+<p>3、   提高玩家成长速度</p>
+<p>因每周玩家可获得的金币数量有上线，玩家若想获得更多的资源，则可参与该玩法获得货币进行资源购买，帮助玩家进行成长。</p>
+<p>三）武道币</p>
+<p>说明：</p>
+<p>1、   在挑战其他玩家胜利排名上升后，系统发放的相应奖励，有钻石和武道币，排名越靠前获得奖励就越高。该货币只可在武道商店进行消费，不具备流通性。</p>
+<p>2、   系统每天21点以后根据玩家的当前名次，次日发放相应的奖励，也是与玩家排名有关，排名越高得到的武道币也越多。200名以内，200币/天。4000名以内，60币/天。其余的都是10币/天。</p>
+<p>武道商店：</p>
+<p>在该商店中可兑换如上图所示：1名英雄及部分2、3级铭文。</p>
+<p>货币设计目的：</p>
+<p>1、   提高玩家成长速度</p>
+<p>玩家通过该玩法获得武道币，通过该货币可以进行铭文和部分英雄购买，提高了玩家的成长速度。</p>
+<p>2、   增加资源获取途径</p>
+<p>玩家每周可获得货币有数量限制，玩家可以通过该玩法额外增加资源(部分2、3级铭文及1名英雄)获取途径。</p>
+<p>3、   促进玩家游戏体验</p>
+<p>若玩家想获得更多的资源，玩家需要进行该玩法的体验来换取货币，继而换取游戏资源。</p>
+<p>优点：</p>
+<p>1、提高玩家对于该玩法的参与度</p>
+<p>玩家为获得更多的远征币从而参与到该玩法中，提高了玩家整体游戏体验，多参与不同类的玩法，不会让玩家觉得该游戏单调乏味。</p>
+<p>2、提高玩家的收集体验</p>
+<p>玩家不在通过单一的方式进行收集，而是通过各样的玩法产生不同种类的货币，从而提高玩家的收集体验。</p>
+<p>3、提高玩家成长速度</p>
+<p>因每周玩家可获得的金币数量有上线，玩家若想获得更多的资源，则可参与该玩法获得货币进行资源购买，帮助玩家进行成长。</p>
+<p>总结<br>不同消费水平玩家的游戏体验：</p>
+<p>1、非R玩家：可以通过长时间在线，获得一定量的资源，并在等级上超越其他玩家。也可以偶尔登陆，以休闲娱乐为主。主要群体以学生为主。</p>
+<p>2、小R玩家：月卡/周卡可以提供大量的钻石，玩家每天至少愿意登陆一次，领取奖励，月卡提供的钻石基本可以体验比小R较多的养成项目，再加上长时间在线，可以获得一个很棒的游戏体验。主要群体以部分学生以及少量上班族为主，是游戏中最多的游戏群体。</p>
+<p>3、中R玩家：充值可以提供大量的核心(养成和收集)资源，因该游戏为MOBA类游戏，所以与其他类型游戏相比，并不能在战力上直接体现出与非R及小R的区别。</p>
+<p>4、大R玩家：追求排行榜的前列，希望有非常好的游戏体验，充值可以在游戏的世界中获得极大的成就感，可以满足现实中无法满足的欲望。</p>
+<p>综上所述，付费充值实际上是玩家通过金钱成本的方式代替时间成本和精力，并且金钱成本的代价要小于时间成本和精力，可见设计者更鼓励玩家充值体验游戏。</p>
+<p>三、       游戏核心玩法<br>一）核心玩法说明<br>5v5玩家间即时对战类以摧毁敌方水晶为目的进行战斗的游戏。</p>
+<p>Ø   游戏玩法介绍(战斗开始前准备)</p>
+<p>(一)  首先进入1分钟的准备界面，在一分钟内需要进行：选英雄，皮肤，铭文页，召唤师技能以及确定。</p>
+<p>(二)  在排位等级到达钻石及以上(或者队友有钻石及以上排位等级)时，双方阵营玩家   需要分别进行禁选2名英雄。(分别由4,5楼来完成禁选时间为25秒) 。</p>
+<p>(三)  最后调整20秒，进入游戏。</p>
+<p>Ø   对局内游戏玩法介绍</p>
+<p>(一)  对局开始时，每个玩家有5秒钟左右的出门准备买装备时间，5秒钟结束后，双方基地开始分别向3条路出小兵。届时玩家也应该准备往各条路走，到达战场。(时间约为游戏开始时的30秒)</p>
+<p>(二)  当一方玩家摧毁另一方玩家水晶及对方玩家投降时，游戏胜利。</p>
+<p>二）游戏乐趣性分析<br>策略性分析<br>战斗外策略：</p>
+<p>1、铭文的选择</p>
+<p>在战斗外可选择不同的铭文的种类搭配：</p>
+<p>铭文共分为三大类，五个等级，根据不同的英雄/位置装配合适的符文组合。</p>
+<p>在多种类的符文可以生成不同种组合，玩家的选择性也会变多，并且会直接影响玩家间的战斗。铭文系统会自带“铭文推荐”功能，为每个英雄如何选择铭文做了合适的推荐，目的是降低玩家的学习成本和降低游戏难度。</p>
+<p>2、皮肤购买</p>
+<p>战斗外可进行购买/选择皮肤：</p>
+<p>皮肤可以在战斗内有少量的属性加成，少量属性加成会对玩家的对局初期有少量的影响，如果两个玩家操作水平相同，那么该少量属性可能会决定一次玩家间的击杀成功/失败。所以进行皮肤购买也是战斗外策略之一。</p>
+<p>3、英雄熟练度</p>
+<p>查看攻略/花费更多时间进行游戏：</p>
+<p>玩家通过对自身所玩的英雄的熟练度，以及对队友和对手的英雄的了解程度，会直接影响游戏的胜负。所以玩家需要多参与游戏，及查看英雄攻略增加对英雄的理解程度，从而达到胜利的目的。</p>
+<p>4、阵容搭配/组合</p>
+<p>阵容搭配和选择会直接决定游戏是否胜利</p>
+<p>当玩家操作水平相近时，玩家可通过在战斗前通过对队友及对手选择英雄的观察，从而选择更合适的英雄来补齐本方阵容的缺陷或对敌方英雄进行针对，来增加本方的胜利系数。</p>
+<p>战斗内策略：</p>
+<p>一） 单人游戏策略：</p>
+<p>玩家在进行单人游戏时，可通过以下几点来提高自己获胜几率：</p>
+<p>1、   1V1为主，提高自身操作操作</p>
+<p>玩家在单人游戏时，因无队友的帮助和额外敌人的骚扰，玩家只需把注意力放在当前对线的人面前，玩家需要提高自己的操作来达到胜利的目的。</p>
+<p>2、   1V1为主，加深自己的英雄池深度</p>
+<p>玩家在单人游戏时，要根据敌方英雄的不同选择来进行选择英雄，从而达到克制的目的，所以玩家需要加深自身英雄池的深度。</p>
+<p>3、   改变自己的出装策略</p>
+<p>在对线中，根据敌方玩家的英雄和敌方英雄的出装策略来改变自己的出装。</p>
+<p>二） 多人游戏策略：</p>
+<p>当玩家进行多人游戏时，因无法了解其他队友的具体实力以及个人游戏风格，玩家可通过：</p>
+<p>1、   增强自身操作水平及游戏节奏的掌控</p>
+<p>玩家通过对自身所使用的英雄进行多次练习，加深对该英雄的理解，可以增加自己所在分路对线的优势。如使用打野英雄，可以帮助弱势队友改变弱势情形及帮助优势队友扩大优势。</p>
+<p>2、   多与队友进行交流沟通，达到节奏一致或相近</p>
+<p>因在单人进行游戏中，无法了解路人队友的游戏思路及操作水平。所以要多与队友进行沟通，争取达到一致节奏，从而掌控整体游戏节奏。当队友游戏节奏相同时，才会增加胜利的可能性。</p>
+<p>3、   减少玩家间的争执、及时调整心态</p>
+<p>玩家间偶尔会因为失误或游戏节奏不同从而产生争执。玩家如果可以平复自己的游戏心态，调节队友间的气氛，减少争执，才可让自己离胜利更进一步。</p>
+<p>4、   选择自己合适的位置(路线)进行游戏</p>
+<p>玩家需要通过大量游戏来发现自己所擅长的位置，多走自己的优势位置，发挥自身长处，来提高游戏胜利。</p>
+<p>操作性分析<br>基础操作按钮及技能数量设计分析：</p>
+<p>右侧操作按键有：回城，恢复，召唤师技能，3个英雄技能及攻击(平A)按键</p>
+<p>如下图所示：</p>
+<p>《王者荣耀》游戏分析（删减版）<br>站位/走位：</p>
+<p>左摇杆控制英雄的移动及移动方向，在MOBA类游戏中对玩家的走位及站位要求较高。走位/站位的成败会直接影响到对局的胜利。</p>
+<p>左侧摇杆设置大小及操作范围合理，既不会让玩家对屏幕的操控有影响，也不会对屏幕的观看造成影响。</p>
+<p>技能释放：</p>
+<pre><code>每名英雄会具有一定蓝量/能量/或无消耗(蓝量和能量可自然回复，能量无法通过补给回复)。
+</code></pre><p>英雄共有3个主动技能，一个被动技能。当英雄到达4级后可以学习大招。</p>
+<p>3个主动技能的目的：</p>
+<p>因在玩家控制手机操作时，手机既是屏幕(输出设备)，也是控制台(输入设备)。当技能过多(4个及以上)时：</p>
+<ol>
+<li><p>玩家出现手误的可能性提高。</p>
+</li>
+<li><p>玩家对屏幕的观看增加了难度。</p>
+</li>
+<li><p>增加了玩家的游戏学习成本。</p>
+</li>
+</ol>
+<p>游戏上手难度：该游戏对新手比较友好，按键数量较少，上手简单。极大程度简化了端游的复杂按键组合。但要玩到中、高级水平需要一定的操作水平及意识和必要的团队配合。</p>
+<p>操作模式介绍</p>
+<p>(1)简单操作方式：</p>
+<p>《王者荣耀》游戏分析（删减版）</p>
+<p>说明：</p>
+<p>如上图所示，除技能外，只有攻击按键。攻击优先级为：</p>
+<p>距离近的英雄&gt;距离远的英雄&gt;距离近的小兵&gt;距离远的小兵&gt;防御塔</p>
+<p>设计目的：</p>
+<p>为了照顾刚进入游戏，对操作不熟练的新手而设置的简单版操作。</p>
+<p>优点：</p>
+<p>简化操作，玩家上手简单。</p>
+<p>(2)普通操作方式：</p>
+<p>说明：</p>
+<p>《王者荣耀》游戏分析（删减版）</p>
+<p>如上图所示，除了攻击键以外，额外增加了两个较小的按钮：补刀和推塔：</p>
+<p>当按补刀按钮的时候只会进行补刀/打野/BOSS，推塔时需要按推塔按钮才会进行推塔，按攻击键只会对地方英雄造成攻击。</p>
+<p>例外情况：</p>
+<p>(1)当周围无小兵/防御塔/野怪，只有敌方英雄时，按补刀键和推塔键会攻击敌方最近的英雄。</p>
+<p>(2)当周围无敌方英雄时，只有小兵/野怪/防御塔时，按攻击键也会进行攻击。(近目标优先)</p>
+<p>设计目的：</p>
+<p>当玩家熟练基本操作后并且对自己操作有着进一步提高要求的玩家所适合选择的方式。</p>
+<p>让操作比简单模式更加细化。</p>
+<p>优点：</p>
+<pre><code>1、两个小按钮大小合适，减少玩家误操作的可能性。
+
+2、操作目的鲜明。
+</code></pre><p>因该操作方式比简单操作方式多了两个按钮，玩家可以根据自己的目的去选择不同 的操作按键。</p>
+<pre><code>3、虽多了两个按钮，但并不影响游戏中玩家的视线。
+
+UI设计合理，大小适中，不会因为按钮增加而增加玩家误操作的可能性，提高玩家的游戏体验。
+</code></pre><p>(3)进阶操作方式：</p>
+<p>说明：</p>
+<p>《王者荣耀》游戏分析（删减版）</p>
+<p>如上图所示，与上个操作按钮不同，这次改为两个靠屏幕的长按钮。</p>
+<p>点击英雄按钮：锁定/切换锁定敌方英雄</p>
+<p>点击小兵按钮：锁定/切换锁定敌方小兵</p>
+<p>设计目的：</p>
+<p>为了让玩家更精准的找到自己想攻击的目标，达到精确打击的目的。</p>
+<p>优点：</p>
+<p>相比普通操作方式更节约操作空间。</p>
+<p>(4)最适宜操作方式：</p>
+<p>《王者荣耀》游戏分析（删减版）</p>
+<p>如上图所示：</p>
+<p>在(2)普通操作方式基础上，增加了视野可见范围内敌方英雄头像在技能上方显示，点击敌方头像会做出普通攻击动作。</p>
+<p>设计目的：</p>
+<p>更适用于高操作玩家的一种操作方式。对比(3)进阶操作方式中的切换按钮，玩家更能节约时间，并且可以通过看技能上防敌方英雄头像按钮比看地图才能得知敌方英雄的出现要更为方便。</p>
+<p>优点：</p>
+<p>增加操作的针对性。满足高操作玩家对操作的需求。</p>
+<p>玩家欲望性分析<br>成长欲：对应所有玩家。</p>
+<p>游戏体验：角色成长（等级提升），收集更多的资源(英雄、皮肤、铭文)操作更熟练。</p>
+<p>限制因素：角色成长、操作熟练度可通过长时间在线游戏练习提高，部分核心资源需要充值获取，或者长时间在线游戏以一种较慢的成长速度成长。</p>
+<p>提供给该类玩家的福利：可通过长时间游戏时间玩家可缓慢成长。</p>
+<p>好胜心：对应大部分玩家。</p>
+<p>游戏体验：战胜对战方玩家，获得较高的排名，被看不起之后希望能被看的起。</p>
+<p>限制因素：核心资源数量(影响低)，操作熟练度。</p>
+<p>提供给该类玩家的福利： PVP的排行榜系统。</p>
+<p>收集欲：对应收集型玩家。</p>
+<p>游戏体验：成就收集，皮肤、英雄收集。游戏的策略性技巧探索，探索游戏的各个系统的机制。</p>
+<p>限制因素：充值、游戏时间。</p>
+<p>提供给该类玩家的福利：玩家通过长时间在线，可收集大多资源、成就。</p>
+
+      
+    </div>
+
+    
+
+    
+    
+    
+
+    
+
+    
+       
+    
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2019/02/26/python-copy-deepcopy/" rel="next" title="Python 直接赋值、浅拷贝和深拷贝之间区别">
+                <i class="fa fa-chevron-left"></i> Python 直接赋值、浅拷贝和深拷贝之间区别
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2019/03/11/photoshop-study/" rel="prev" title="photoshop_study">
+                photoshop_study <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+  </div>
+
+
+          </div>
+          
+
+  
+    <div class="comments" id="comments">
+      
+        <div id="gitment-container"></div>
+      
+    </div>
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+      <div id="sidebar-dimmer"></div>
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+
+      <section class="site-overview-wrap sidebar-panel sidebar-panel-active">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <p class="site-author-name" itemprop="name">BING WU</p>
+              <p class="site-description motion-element" itemprop="description">Code Eveything...</p>
+          </div>
+
+          
+            <nav class="site-state motion-element">
+              
+                <div class="site-state-item site-state-posts">
+                
+                  <a href="/archives/">
+                
+                    <span class="site-state-item-count">22</span>
+                    <span class="site-state-item-name">posts</span>
+                  </a>
+                </div>
+              
+
+              
+  
+  
+  <div class="site-state-item site-state-categories">
+    
+	  <a href="/categories/index.html">
+	
+      <span class="site-state-item-count">15</span>
+      <span class="site-state-item-name">categories</span>
+    </a>
+  </div>
+
+
+
+  
+  
+  <div class="site-state-item site-state-tags">
+    
+	  <a href="/tags/index.html">
+	
+      <span class="site-state-item-count">15</span>
+      <span class="site-state-item-name">tags</span>
+    </a>
+  </div>
+
+            </nav>
+          
+
+          
+
+          
+            <div class="links-of-author motion-element">
+              
+                <span class="links-of-author-item">
+                  
+                  
+                    
+                  
+                  
+                    
+                  
+                  <a href="https://github.com/binyon" title="GitHub &rarr; https://github.com/binyon" rel="noopener" target="_blank"><i class="fa fa-fw fa-github"></i>GitHub</a>
+                </span>
+              
+                <span class="links-of-author-item">
+                  
+                  
+                    
+                  
+                  
+                    
+                  
+                  <a href="mailto:bingwu1949@gmail.com" title="E-Mail &rarr; mailto:bingwu1949@gmail.com" rel="noopener" target="_blank"><i class="fa fa-fw fa-envelope"></i>E-Mail</a>
+                </span>
+              
+            </div>
+          
+
+          
+
+          
+          
+
+          
+            
+          
+          
+
+        </div>
+      </section>
+
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2019</span>
+  <span class="with-love" id="animate">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">BING WU</span>
+
+  
+
+  
+</div>
+
+
+  <div class="powered-by">Powered by <a href="https://hexo.io" class="theme-link" rel="noopener" target="_blank">Hexo</a> v3.8.0</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">Theme – <a href="https://theme-next.org" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> v6.5.0</div>
+
+
+
+
+        
+<div class="busuanzi-count">
+  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+  
+    <span class="site-uv" title="Total Visitors">
+      <i class="fa fa-user"></i>
+      <span class="busuanzi-value" id="busuanzi_value_site_uv"></span>
+    </span>
+  
+
+  
+    <span class="site-pv" title="Total Views">
+      <i class="fa fa-eye"></i>
+      <span class="busuanzi-value" id="busuanzi_value_site_pv"></span>
+    </span>
+  
+</div>
+
+
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+	
+    
+
+    
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+    
+      
+  
+  <script type="text/javascript" color="0,0,255" opacity="0.5" zindex="-1" count="99" src="/lib/canvas-nest/canvas-nest.min.js"></script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=6.5.0"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=6.5.0"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=6.5.0"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=6.5.0"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=6.5.0"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=6.5.0"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=6.5.0"></script>
+
+
+
+  
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+  
+
+  <script type="text/javascript">
+    // Popup Window;
+    var isfetched = false;
+    var isXml = true;
+    // Search DB path;
+    var search_path = "search.xml";
+    if (search_path.length === 0) {
+      search_path = "search.xml";
+    } else if (/json$/i.test(search_path)) {
+      isXml = false;
+    }
+    var path = "/" + search_path;
+    // monitor main search box;
+
+    var onPopupClose = function (e) {
+      $('.popup').hide();
+      $('#local-search-input').val('');
+      $('.search-result-list').remove();
+      $('#no-result').remove();
+      $(".local-search-pop-overlay").remove();
+      $('body').css('overflow', '');
+    }
+
+    function proceedsearch() {
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay"></div>')
+        .css('overflow', 'hidden');
+      $('.search-popup-overlay').click(onPopupClose);
+      $('.popup').toggle();
+      var $localSearchInput = $('#local-search-input');
+      $localSearchInput.attr("autocapitalize", "none");
+      $localSearchInput.attr("autocorrect", "off");
+      $localSearchInput.focus();
+    }
+
+    // search function;
+    var searchFunc = function(path, search_id, content_id) {
+      'use strict';
+
+      // start loading animation
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay">' +
+          '<div id="search-loading-icon">' +
+          '<i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>' +
+          '</div>' +
+          '</div>')
+        .css('overflow', 'hidden');
+      $("#search-loading-icon").css('margin', '20% auto 0 auto').css('text-align', 'center');
+
+      
+
+      $.ajax({
+        url: path,
+        dataType: isXml ? "xml" : "json",
+        async: true,
+        success: function(res) {
+          // get the contents from search data
+          isfetched = true;
+          $('.popup').detach().appendTo('.header-inner');
+          var datas = isXml ? $("entry", res).map(function() {
+            return {
+              title: $("title", this).text(),
+              content: $("content",this).text(),
+              url: $("url" , this).text()
+            };
+          }).get() : res;
+          var input = document.getElementById(search_id);
+          var resultContent = document.getElementById(content_id);
+          var inputEventFunction = function() {
+            var searchText = input.value.trim().toLowerCase();
+            var keywords = searchText.split(/[\s\-]+/);
+            if (keywords.length > 1) {
+              keywords.push(searchText);
+            }
+            var resultItems = [];
+            if (searchText.length > 0) {
+              // perform local searching
+              datas.forEach(function(data) {
+                var isMatch = false;
+                var hitCount = 0;
+                var searchTextCount = 0;
+                var title = data.title.trim();
+                var titleInLowerCase = title.toLowerCase();
+                var content = data.content.trim().replace(/<[^>]+>/g,"");
+                
+                var contentInLowerCase = content.toLowerCase();
+                var articleUrl = decodeURIComponent(data.url);
+                var indexOfTitle = [];
+                var indexOfContent = [];
+                // only match articles with not empty titles
+                if(title != '') {
+                  keywords.forEach(function(keyword) {
+                    function getIndexByWord(word, text, caseSensitive) {
+                      var wordLen = word.length;
+                      if (wordLen === 0) {
+                        return [];
+                      }
+                      var startPosition = 0, position = [], index = [];
+                      if (!caseSensitive) {
+                        text = text.toLowerCase();
+                        word = word.toLowerCase();
+                      }
+                      while ((position = text.indexOf(word, startPosition)) > -1) {
+                        index.push({position: position, word: word});
+                        startPosition = position + wordLen;
+                      }
+                      return index;
+                    }
+
+                    indexOfTitle = indexOfTitle.concat(getIndexByWord(keyword, titleInLowerCase, false));
+                    indexOfContent = indexOfContent.concat(getIndexByWord(keyword, contentInLowerCase, false));
+                  });
+                  if (indexOfTitle.length > 0 || indexOfContent.length > 0) {
+                    isMatch = true;
+                    hitCount = indexOfTitle.length + indexOfContent.length;
+                  }
+                }
+
+                // show search results
+
+                if (isMatch) {
+                  // sort index by position of keyword
+
+                  [indexOfTitle, indexOfContent].forEach(function (index) {
+                    index.sort(function (itemLeft, itemRight) {
+                      if (itemRight.position !== itemLeft.position) {
+                        return itemRight.position - itemLeft.position;
+                      } else {
+                        return itemLeft.word.length - itemRight.word.length;
+                      }
+                    });
+                  });
+
+                  // merge hits into slices
+
+                  function mergeIntoSlice(text, start, end, index) {
+                    var item = index[index.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    var hits = [];
+                    var searchTextCountInSlice = 0;
+                    while (position + word.length <= end && index.length != 0) {
+                      if (word === searchText) {
+                        searchTextCountInSlice++;
+                      }
+                      hits.push({position: position, length: word.length});
+                      var wordEnd = position + word.length;
+
+                      // move to next position of hit
+
+                      index.pop();
+                      while (index.length != 0) {
+                        item = index[index.length - 1];
+                        position = item.position;
+                        word = item.word;
+                        if (wordEnd > position) {
+                          index.pop();
+                        } else {
+                          break;
+                        }
+                      }
+                    }
+                    searchTextCount += searchTextCountInSlice;
+                    return {
+                      hits: hits,
+                      start: start,
+                      end: end,
+                      searchTextCount: searchTextCountInSlice
+                    };
+                  }
+
+                  var slicesOfTitle = [];
+                  if (indexOfTitle.length != 0) {
+                    slicesOfTitle.push(mergeIntoSlice(title, 0, title.length, indexOfTitle));
+                  }
+
+                  var slicesOfContent = [];
+                  while (indexOfContent.length != 0) {
+                    var item = indexOfContent[indexOfContent.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    // cut out 100 characters
+                    var start = position - 20;
+                    var end = position + 80;
+                    if(start < 0){
+                      start = 0;
+                    }
+                    if (end < position + word.length) {
+                      end = position + word.length;
+                    }
+                    if(end > content.length){
+                      end = content.length;
+                    }
+                    slicesOfContent.push(mergeIntoSlice(content, start, end, indexOfContent));
+                  }
+
+                  // sort slices in content by search text's count and hits' count
+
+                  slicesOfContent.sort(function (sliceLeft, sliceRight) {
+                    if (sliceLeft.searchTextCount !== sliceRight.searchTextCount) {
+                      return sliceRight.searchTextCount - sliceLeft.searchTextCount;
+                    } else if (sliceLeft.hits.length !== sliceRight.hits.length) {
+                      return sliceRight.hits.length - sliceLeft.hits.length;
+                    } else {
+                      return sliceLeft.start - sliceRight.start;
+                    }
+                  });
+
+                  // select top N slices in content
+
+                  var upperBound = parseInt('1');
+                  if (upperBound >= 0) {
+                    slicesOfContent = slicesOfContent.slice(0, upperBound);
+                  }
+
+                  // highlight title and content
+
+                  function highlightKeyword(text, slice) {
+                    var result = '';
+                    var prevEnd = slice.start;
+                    slice.hits.forEach(function (hit) {
+                      result += text.substring(prevEnd, hit.position);
+                      var end = hit.position + hit.length;
+                      result += '<b class="search-keyword">' + text.substring(hit.position, end) + '</b>';
+                      prevEnd = end;
+                    });
+                    result += text.substring(prevEnd, slice.end);
+                    return result;
+                  }
+
+                  var resultItem = '';
+
+                  if (slicesOfTitle.length != 0) {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + highlightKeyword(title, slicesOfTitle[0]) + "</a>";
+                  } else {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + title + "</a>";
+                  }
+
+                  slicesOfContent.forEach(function (slice) {
+                    resultItem += "<a href='" + articleUrl + "'>" +
+                      "<p class=\"search-result\">" + highlightKeyword(content, slice) +
+                      "...</p>" + "</a>";
+                  });
+
+                  resultItem += "</li>";
+                  resultItems.push({
+                    item: resultItem,
+                    searchTextCount: searchTextCount,
+                    hitCount: hitCount,
+                    id: resultItems.length
+                  });
+                }
+              })
+            };
+            if (keywords.length === 1 && keywords[0] === "") {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-search fa-5x" /></div>'
+            } else if (resultItems.length === 0) {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-frown-o fa-5x" /></div>'
+            } else {
+              resultItems.sort(function (resultLeft, resultRight) {
+                if (resultLeft.searchTextCount !== resultRight.searchTextCount) {
+                  return resultRight.searchTextCount - resultLeft.searchTextCount;
+                } else if (resultLeft.hitCount !== resultRight.hitCount) {
+                  return resultRight.hitCount - resultLeft.hitCount;
+                } else {
+                  return resultRight.id - resultLeft.id;
+                }
+              });
+              var searchResultList = '<ul class=\"search-result-list\">';
+              resultItems.forEach(function (result) {
+                searchResultList += result.item;
+              })
+              searchResultList += "</ul>";
+              resultContent.innerHTML = searchResultList;
+            }
+          }
+
+          if ('auto' === 'auto') {
+            input.addEventListener('input', inputEventFunction);
+          } else {
+            $('.search-icon').click(inputEventFunction);
+            input.addEventListener('keypress', function (event) {
+              if (event.keyCode === 13) {
+                inputEventFunction();
+              }
+            });
+          }
+
+          // remove loading animation
+          $(".local-search-pop-overlay").remove();
+          $('body').css('overflow', '');
+
+          proceedsearch();
+        }
+      });
+    }
+
+    // handle and trigger popup window;
+    $('.popup-trigger').click(function(e) {
+      e.stopPropagation();
+      if (isfetched === false) {
+        searchFunc(path, 'local-search-input', 'local-search-result');
+      } else {
+        proceedsearch();
+      };
+    });
+
+    $('.popup-btn-close').click(onPopupClose);
+    $('.popup').click(function(e){
+      e.stopPropagation();
+    });
+    $(document).on('keyup', function (event) {
+      var shouldDismissSearchPopup = event.which === 27 &&
+        $('.search-popup').is(':visible');
+      if (shouldDismissSearchPopup) {
+        onPopupClose();
+      }
+    });
+  </script>
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+  
+
+  
+
+
+  
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>
